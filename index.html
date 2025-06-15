@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الفورم</title>
+    <style>
+        /* CSS للتصميم */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            position: relative; /* مهم لوضع اللوجو بشكل مطلق */
+        }
+        .logo {
+            position: absolute; /* لوضع اللوجو بشكل حر */
+            top: 20px; /* المسافة من الأعلى */
+            left: 20px; /* المسافة من اليسار */
+            width: 150px; /* حجم اللوجو، يمكنك تعديله */
+            height: auto; /* يحافظ على نسبة العرض إلى الارتفاع */
+            z-index: 1000; /* للتأكد من ظهور اللوجو فوق باقي المحتوى */
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            /* لكي لا يتداخل اللوجو مع العنوان */
+            margin-top: 50px; /* يمكنك تعديل هذه القيمة حسب حجم اللوجو */
+        }
+        h1 {
+            color: #0056b3;
+            margin-bottom: 30px;
+        }
+        .button-group {
+            display: flex; /* لجعل الأزرار تظهر جنبًا إلى جنب */
+            justify-content: center; /* لتوسيط الأزرار */
+            flex-wrap: wrap; /* للسماح للأزرار بالنزول لسطر جديد في الشاشات الصغيرة */
+        }
+        .button-group button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <img src="Scan.png" alt="Alfa Scan Logo" class="logo">
+
+    <div class="container">
+        <h1>اختر الفورم الذي تريده</h1>
+        <div class="button-group">
+            <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLScwcRajXYahHa1YCmhcDrHYagl4_YKjfUl_zKoMkl27pCykGw/viewform'">
+                إرفاق روشتات المستشفيات
+            </button>
+
+            <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSe9EXtbM_dydNpUm4ByVopVEcmfcysSyYkUubzAHmjNdrZ8rg/viewform'">
+                فورم إضافة طبيب جديد
+            </button>
+        </div>
+    </div>
+</body>
+</html>
