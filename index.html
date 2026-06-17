@@ -63,7 +63,6 @@ th.desc::after{content:" ↓";color:#2563eb}
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
   <h1>Contracts YOY</h1>
@@ -74,12 +73,9 @@ th.desc::after{content:" ↓";color:#2563eb}
     </button>
   </div>
 </div>
-
 <div class="main">
   <div id="error-box" class="error-box">⚠️ تعذر تحميل البيانات. تأكدي من الاتصال بالإنترنت ثم اضغطي تحديث.</div>
-
   <div id="loading" class="loading">⏳ جاري تحميل البيانات من Google Sheets...</div>
-
   <div id="content" style="display:none">
     <div class="stats">
       <div class="stat"><div class="stat-label">إجمالي السجلات</div><div class="stat-val dark" id="s-total">0</div></div>
@@ -87,7 +83,6 @@ th.desc::after{content:" ↓";color:#2563eb}
       <div class="stat"><div class="stat-label">موافقة أسعار</div><div class="stat-val teal" id="s-approve">0</div></div>
       <div class="stat"><div class="stat-label">تقديم أسعار</div><div class="stat-val blue" id="s-offer">0</div></div>
     </div>
-
     <div class="filters">
       <input type="text" id="search" placeholder="بحث باسم الشركة أو الموظف..." />
       <select id="filter-type">
@@ -104,7 +99,6 @@ th.desc::after{content:" ↓";color:#2563eb}
       <select id="filter-person"><option value="">كل الموظفين</option></select>
       <button class="clear-btn" onclick="clearFilters()">مسح الفلاتر</button>
     </div>
-
     <div class="table-wrap">
       <div class="table-header">
         <strong>سجلات العقود</strong>
@@ -133,86 +127,74 @@ th.desc::after{content:" ↓";color:#2563eb}
     </div>
   </div>
 </div>
-
 <script>
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-le4MHR4J3dIjQfBE2j22mvnWa4Xncfr-FQrFxQfNpsgKhhxXP6Ix8DJ4vEUhLFgk1tklYZpKB226/pub?gid=467036226&single=true&output=csv";
-
-let allData = [];
-let filtered = [];
-let sortCol = -1, sortDir = 1;
-
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
-    const cols = [];
-    let cur = '', inQ = false;
-    for (let c = 0; c < line.length; c++) {
-      const ch = line[c];
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-      else { cur += ch; }
+let allData=[],filtered=[],sortCol=-1,sortDir=1;
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const line=lines[i];
+    const cols=[];
+    let cur='',inQ=false;
+    for(let c=0;c<line.length;c++){
+      const ch=line[c];
+      if(ch==='"'){inQ=!inQ;}
+      else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+      else{cur+=ch;}
     }
     cols.push(cur.trim());
-    if (cols.length >= 2 && cols[0]) rows.push(cols);
+    if(cols.length>=2&&cols[0])rows.push(cols);
   }
   return rows;
 }
-
-async function loadData() {
-  const btn = document.getElementById('refresh-btn');
-  const icon = document.getElementById('refresh-icon');
-  const errBox = document.getElementById('error-box');
-  btn.disabled = true;
-  icon.innerHTML = '<span class="spin">↻</span>';
-  errBox.style.display = 'none';
-
-  try {
-    const res = await fetch(CSV_URL);
-    if (!res.ok) throw new Error('fetch failed');
-    const text = await res.text();
-    allData = parseCSV(text);
-
-    // rebuild person filter
-    const persons = [...new Set(allData.map(r => r[1]).filter(Boolean))];
-    const sel = document.getElementById('filter-person');
-    sel.innerHTML = '<option value="">كل الموظفين</option>';
-    persons.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o); });
-
-    const now = new Date();
-    document.getElementById('last-update').textContent = 'آخر تحديث: ' + now.toLocaleTimeString('ar-EG');
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
+async function loadData(){
+  const btn=document.getElementById('refresh-btn');
+  const icon=document.getElementById('refresh-icon');
+  const errBox=document.getElementById('error-box');
+  btn.disabled=true;
+  icon.innerHTML='<span class="spin">↻</span>';
+  errBox.style.display='none';
+  try{
+    const res=await fetch(CSV_URL);
+    if(!res.ok)throw new Error('fetch failed');
+    const text=await res.text();
+    allData=parseCSV(text);
+    const persons=[...new Set(allData.map(r=>r[1]).filter(Boolean))];
+    const sel=document.getElementById('filter-person');
+    sel.innerHTML='<option value="">كل الموظفين</option>';
+    persons.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;sel.appendChild(o);});
+    const now=new Date();
+    document.getElementById('last-update').textContent='آخر تحديث: '+now.toLocaleTimeString('ar-EG');
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display='block';
     applyFilters();
-  } catch(e) {
-    errBox.style.display = 'block';
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = allData.length ? 'block' : 'none';
-  } finally {
-    btn.disabled = false;
-    icon.textContent = '↻';
+  }catch(e){
+    errBox.style.display='block';
+    document.getElementById('loading').style.display='none';
+    document.getElementById('content').style.display=allData.length?'block':'none';
+  }finally{
+    btn.disabled=false;
+    icon.textContent='↻';
   }
 }
-
-function typeBadge(t) {
-  if (t === "موافقه اسعار") return `<span class="badge b-approve">موافقة أسعار</span>`;
-  if (t === "تقديم اسعار") return `<span class="badge b-offer">تقديم أسعار</span>`;
-  if (t === "طلبات") return `<span class="badge b-req">طلبات</span>`;
-  return t ? `<span class="badge b-pending">${t}</span>` : '—';
+function typeBadge(t){
+  if(t==="موافقه اسعار")return`<span class="badge b-approve">موافقة أسعار</span>`;
+  if(t==="تقديم اسعار")return`<span class="badge b-offer">تقديم أسعار</span>`;
+  if(t==="طلبات")return`<span class="badge b-req">طلبات</span>`;
+  return t?`<span class="badge b-pending">${t}</span>`:'—';
 }
-function statusBadge(s) {
-  if (s === "Done") return `<span class="badge b-done">✓ Done</span>`;
-  return `<span class="badge b-pending">—</span>`;
+function statusBadge(s){
+  if(s==="Done")return`<span class="badge b-done">✓ Done</span>`;
+  return`<span class="badge b-pending">—</span>`;
 }
-
-function render() {
-  const tbody = document.getElementById('table-body');
-  const noRes = document.getElementById('no-results');
-  document.getElementById('count-label').textContent = filtered.length + ' سجل';
-  if (!filtered.length) { tbody.innerHTML = ''; noRes.style.display = 'block'; return; }
-  noRes.style.display = 'none';
-  tbody.innerHTML = filtered.map((r, i) => `
+function render(){
+  const tbody=document.getElementById('table-body');
+  const noRes=document.getElementById('no-results');
+  document.getElementById('count-label').textContent=filtered.length+' سجل';
+  if(!filtered.length){tbody.innerHTML='';noRes.style.display='block';return;}
+  noRes.style.display='none';
+  tbody.innerHTML=filtered.map((r,i)=>`
     <tr>
       <td class="num">${i+1}</td>
       <td class="date-cell">${r[0]||'—'}</td>
@@ -223,58 +205,52 @@ function render() {
       <td style="font-size:12px;color:#8899bb">${r[5]||'—'}</td>
       <td class="notes-cell" title="${(r[6]||'').replace(/"/g,'')}">${r[6]||'—'}</td>
       <td>${statusBadge(r[8])}</td>
-      <td>${r[7] ? `<a class="doc-link" href="${r[7]}" target="_blank">↗ فتح</a>` : '—'}</td>
+      <td>${r[7]?`<a class="doc-link" href="${r[7]}" target="_blank">↗ فتح</a>`:'—'}</td>
     </tr>`).join('');
   updateStats();
 }
-
-function updateStats() {
-  document.getElementById('s-total').textContent = filtered.length;
-  document.getElementById('s-done').textContent = filtered.filter(r => r[8] === 'Done').length;
-  document.getElementById('s-approve').textContent = filtered.filter(r => r[3] === 'موافقه اسعار').length;
-  document.getElementById('s-offer').textContent = filtered.filter(r => r[3] === 'تقديم اسعار').length;
+function updateStats(){
+  document.getElementById('s-total').textContent=filtered.length;
+  document.getElementById('s-done').textContent=filtered.filter(r=>r[8]==='Done').length;
+  document.getElementById('s-approve').textContent=filtered.filter(r=>r[3]==='موافقه اسعار').length;
+  document.getElementById('s-offer').textContent=filtered.filter(r=>r[3]==='تقديم اسعار').length;
 }
-
-function applyFilters() {
-  const q = document.getElementById('search').value.trim();
-  const type = document.getElementById('filter-type').value;
-  const status = document.getElementById('filter-status').value;
-  const person = document.getElementById('filter-person').value;
-  filtered = allData.filter(r => {
-    if (q && !(r[2]||'').includes(q) && !(r[1]||'').includes(q) && !(r[6]||'').includes(q)) return false;
-    if (type && r[3] !== type) return false;
-    if (status === 'Done' && r[8] !== 'Done') return false;
-    if (status === 'pending' && r[8] === 'Done') return false;
-    if (person && r[1] !== person) return false;
+function applyFilters(){
+  const q=document.getElementById('search').value.trim();
+  const type=document.getElementById('filter-type').value;
+  const status=document.getElementById('filter-status').value;
+  const person=document.getElementById('filter-person').value;
+  filtered=allData.filter(r=>{
+    if(q&&!(r[2]||'').includes(q)&&!(r[1]||'').includes(q)&&!(r[6]||'').includes(q))return false;
+    if(type&&r[3]!==type)return false;
+    if(status==='Done'&&r[8]!=='Done')return false;
+    if(status==='pending'&&r[8]==='Done')return false;
+    if(person&&r[1]!==person)return false;
     return true;
   });
   render();
 }
-
-function clearFilters() {
-  document.getElementById('search').value = '';
-  document.getElementById('filter-type').value = '';
-  document.getElementById('filter-status').value = '';
-  document.getElementById('filter-person').value = '';
+function clearFilters(){
+  document.getElementById('search').value='';
+  document.getElementById('filter-type').value='';
+  document.getElementById('filter-status').value='';
+  document.getElementById('filter-person').value='';
   applyFilters();
 }
-
-document.getElementById('search').addEventListener('input', applyFilters);
-document.getElementById('filter-type').addEventListener('change', applyFilters);
-document.getElementById('filter-status').addEventListener('change', applyFilters);
-document.getElementById('filter-person').addEventListener('change', applyFilters);
-
-document.querySelectorAll('th[data-col]').forEach(th => {
-  th.addEventListener('click', () => {
-    const col = parseInt(th.dataset.col);
-    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
-    document.querySelectorAll('th').forEach(t => t.classList.remove('asc','desc'));
-    th.classList.add(sortDir === 1 ? 'asc' : 'desc');
-    filtered.sort((a, b) => (a[col]||'').localeCompare(b[col]||'') * sortDir);
+document.getElementById('search').addEventListener('input',applyFilters);
+document.getElementById('filter-type').addEventListener('change',applyFilters);
+document.getElementById('filter-status').addEventListener('change',applyFilters);
+document.getElementById('filter-person').addEventListener('change',applyFilters);
+document.querySelectorAll('th[data-col]').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const col=parseInt(th.dataset.col);
+    if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+    document.querySelectorAll('th').forEach(t=>t.classList.remove('asc','desc'));
+    th.classList.add(sortDir===1?'asc':'desc');
+    filtered.sort((a,b)=>(a[col]||'').localeCompare(b[col]||'')*sortDir);
     render();
   });
 });
-
 loadData();
 </script>
 </body>
