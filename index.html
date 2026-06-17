@@ -1,89 +1,281 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FTV7EBPTDN"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-FTV7EBPTDN');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة الفورم</title>
-    <style>
-        /* CSS للتصميم */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            position: relative; /* مهم لوضع اللوجو بشكل مطلق */
-        }
-        .logo {
-            position: absolute; /* لوضع اللوجو بشكل حر */
-            top: 20px; /* المسافة من الأعلى */
-            left: 20px; /* المسافة من اليسار */
-            width: 150px; /* حجم اللوجو، يمكنك تعديله */
-            height: auto; /* يحافظ على نسبة العرض إلى الارتفاع */
-            z-index: 1000; /* للتأكد من ظهور اللوجو فوق باقي المحتوى */
-        }
-        .container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            /* لكي لا يتداخل اللوجو مع العنوان */
-            margin-top: 50px; /* يمكنك تعديل هذه القيمة حسب حجم اللوجو */
-        }
-        h1 {
-            color: #0056b3;
-            margin-bottom: 30px;
-        }
-        .button-group {
-            display: flex; /* لجعل الأزرار تظهر جنبًا إلى جنب */
-            justify-content: center; /* لتوسيط الأزرار */
-            flex-wrap: wrap; /* للسماح للأزرار بالنزول لسطر جديد في الشاشات الصغيرة */
-        }
-        .button-group button {
-            background-color: #007bff;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .button-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contracts YOY</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;direction:rtl}
+.topbar{background:#1a1a2e;color:#fff;padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar h1{font-size:18px;font-weight:600}
+.topbar-right{margin-right:auto;display:flex;align-items:center;gap:12px}
+.refresh-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
+.refresh-btn:hover{background:#1d4ed8}
+.refresh-btn:disabled{background:#555;cursor:not-allowed}
+.last-update{font-size:12px;color:#8899bb}
+.main{padding:20px 24px}
+.loading{text-align:center;padding:60px;color:#8899bb;font-size:15px}
+.error-box{background:#fff0f0;border:1px solid #fca5a5;border-radius:10px;padding:16px 20px;margin-bottom:16px;color:#b91c1c;font-size:13px;display:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#fff;border-radius:10px;padding:14px 18px;border:1px solid #e8eaf0}
+.stat-label{font-size:11px;color:#8899bb;margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:700}
+.stat-val.blue{color:#2563eb}
+.stat-val.green{color:#16a34a}
+.stat-val.teal{color:#0f766e}
+.stat-val.dark{color:#1a1a2e}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filters input,.filters select{height:36px;padding:0 12px;font-size:13px;border:1px solid #dde1ea;border-radius:8px;background:#fff;color:#1a1a2e;outline:none;font-family:inherit}
+.filters input:focus,.filters select:focus{border-color:#2563eb}
+.filters input{width:220px}
+.clear-btn{height:36px;padding:0 14px;font-size:13px;border:1px solid #dde1ea;border-radius:8px;background:#fff;color:#8899bb;cursor:pointer;font-family:inherit}
+.clear-btn:hover{background:#f5f6fa;color:#1a1a2e}
+.table-wrap{background:#fff;border-radius:12px;border:1px solid #e8eaf0;overflow:hidden}
+.table-header{padding:14px 18px;border-bottom:1px solid #e8eaf0;display:flex;align-items:center;justify-content:space-between}
+.table-header strong{font-size:14px}
+.table-header span{font-size:13px;color:#8899bb}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f9fafb;color:#8899bb;font-weight:600;padding:10px 14px;text-align:right;border-bottom:1px solid #e8eaf0;font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:#1a1a2e}
+td{padding:10px 14px;border-bottom:1px solid #f0f2f7;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+.num{color:#bbc0ce;font-size:11px;text-align:center}
+.date-cell{white-space:nowrap;color:#8899bb;font-size:12px}
+.person-cell{font-weight:600;font-size:12px}
+.notes-cell{font-size:11px;color:#8899bb;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.b-offer{background:#eff6ff;color:#1d4ed8}
+.b-approve{background:#f0fdf4;color:#15803d}
+.b-req{background:#fff7ed;color:#c2410c}
+.b-done{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.b-pending{background:#f5f6fa;color:#8899bb}
+.doc-link{color:#2563eb;text-decoration:none;font-size:12px}
+.doc-link:hover{text-decoration:underline}
+.no-results{text-align:center;padding:40px;color:#8899bb;font-size:14px}
+th.asc::after{content:" ↑";color:#2563eb}
+th.desc::after{content:" ↓";color:#2563eb}
+.spin{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}.filters input{width:150px}}
+</style>
 </head>
 <body>
-    <img src="Scan.png" alt="Alfa Scan Logo" class="logo">
 
-    <div class="container">
-        <h1>اختر الفورم الذي تريده</h1>
-        <div class="button-group">
-            <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLScwcRajXYahHa1YCmhcDrHYagl4_YKjfUl_zKoMkl27pCykGw/viewform'">
-                إرفاق روشتات المستشفيات
-            </button>
+<div class="topbar">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+  <h1>Contracts YOY</h1>
+  <div class="topbar-right">
+    <span class="last-update" id="last-update">جاري التحميل...</span>
+    <button class="refresh-btn" id="refresh-btn" onclick="loadData()">
+      <span id="refresh-icon">↻</span> تحديث
+    </button>
+  </div>
+</div>
 
-            <button onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSe9EXtbM_dydNpUm4ByVopVEcmfcysSyYkUubzAHmjNdrZ8rg/viewform'">
-                فورم إضافة طبيب جديد
-            </button>
-        </div>
+<div class="main">
+  <div id="error-box" class="error-box">⚠️ تعذر تحميل البيانات. تأكدي من الاتصال بالإنترنت ثم اضغطي تحديث.</div>
+
+  <div id="loading" class="loading">⏳ جاري تحميل البيانات من Google Sheets...</div>
+
+  <div id="content" style="display:none">
+    <div class="stats">
+      <div class="stat"><div class="stat-label">إجمالي السجلات</div><div class="stat-val dark" id="s-total">0</div></div>
+      <div class="stat"><div class="stat-label">تم التطبيق (Done)</div><div class="stat-val green" id="s-done">0</div></div>
+      <div class="stat"><div class="stat-label">موافقة أسعار</div><div class="stat-val teal" id="s-approve">0</div></div>
+      <div class="stat"><div class="stat-label">تقديم أسعار</div><div class="stat-val blue" id="s-offer">0</div></div>
     </div>
+
+    <div class="filters">
+      <input type="text" id="search" placeholder="بحث باسم الشركة أو الموظف..." />
+      <select id="filter-type">
+        <option value="">كل أنواع الخدمة</option>
+        <option value="تقديم اسعار">تقديم أسعار</option>
+        <option value="موافقه اسعار">موافقة أسعار</option>
+        <option value="طلبات">طلبات</option>
+      </select>
+      <select id="filter-status">
+        <option value="">كل الحالات</option>
+        <option value="Done">Done</option>
+        <option value="pending">قيد الانتظار</option>
+      </select>
+      <select id="filter-person"><option value="">كل الموظفين</option></select>
+      <button class="clear-btn" onclick="clearFilters()">مسح الفلاتر</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <strong>سجلات العقود</strong>
+        <span id="count-label">0 سجل</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th data-col="0" style="width:90px">التاريخ</th>
+              <th data-col="1" style="width:110px">الموظف</th>
+              <th data-col="2" style="width:180px">اسم الشركة</th>
+              <th data-col="3" style="width:110px">نوع الخدمة</th>
+              <th data-col="4" style="width:100px">قائمة الأسعار</th>
+              <th data-col="5" style="width:100px">تاريخ التفعيل</th>
+              <th data-col="6" style="width:180px">ملاحظات</th>
+              <th data-col="8" style="width:80px">الحالة</th>
+              <th style="width:70px">مستند</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+      <div id="no-results" class="no-results" style="display:none">لا توجد نتائج مطابقة</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-le4MHR4J3dIjQfBE2j22mvnWa4Xncfr-FQrFxQfNpsgKhhxXP6Ix8DJ4vEUhLFgk1tklYZpKB226/pub?gid=467036226&single=true&output=csv";
+
+let allData = [];
+let filtered = [];
+let sortCol = -1, sortDir = 1;
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let c = 0; c < line.length; c++) {
+      const ch = line[c];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+    if (cols.length >= 2 && cols[0]) rows.push(cols);
+  }
+  return rows;
+}
+
+async function loadData() {
+  const btn = document.getElementById('refresh-btn');
+  const icon = document.getElementById('refresh-icon');
+  const errBox = document.getElementById('error-box');
+  btn.disabled = true;
+  icon.innerHTML = '<span class="spin">↻</span>';
+  errBox.style.display = 'none';
+
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('fetch failed');
+    const text = await res.text();
+    allData = parseCSV(text);
+
+    // rebuild person filter
+    const persons = [...new Set(allData.map(r => r[1]).filter(Boolean))];
+    const sel = document.getElementById('filter-person');
+    sel.innerHTML = '<option value="">كل الموظفين</option>';
+    persons.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o); });
+
+    const now = new Date();
+    document.getElementById('last-update').textContent = 'آخر تحديث: ' + now.toLocaleTimeString('ar-EG');
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    applyFilters();
+  } catch(e) {
+    errBox.style.display = 'block';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = allData.length ? 'block' : 'none';
+  } finally {
+    btn.disabled = false;
+    icon.textContent = '↻';
+  }
+}
+
+function typeBadge(t) {
+  if (t === "موافقه اسعار") return `<span class="badge b-approve">موافقة أسعار</span>`;
+  if (t === "تقديم اسعار") return `<span class="badge b-offer">تقديم أسعار</span>`;
+  if (t === "طلبات") return `<span class="badge b-req">طلبات</span>`;
+  return t ? `<span class="badge b-pending">${t}</span>` : '—';
+}
+function statusBadge(s) {
+  if (s === "Done") return `<span class="badge b-done">✓ Done</span>`;
+  return `<span class="badge b-pending">—</span>`;
+}
+
+function render() {
+  const tbody = document.getElementById('table-body');
+  const noRes = document.getElementById('no-results');
+  document.getElementById('count-label').textContent = filtered.length + ' سجل';
+  if (!filtered.length) { tbody.innerHTML = ''; noRes.style.display = 'block'; return; }
+  noRes.style.display = 'none';
+  tbody.innerHTML = filtered.map((r, i) => `
+    <tr>
+      <td class="num">${i+1}</td>
+      <td class="date-cell">${r[0]||'—'}</td>
+      <td class="person-cell">${r[1]||'—'}</td>
+      <td style="font-size:13px">${r[2]||'—'}</td>
+      <td>${typeBadge(r[3])}</td>
+      <td style="font-size:12px;color:#8899bb">${r[4]||'—'}</td>
+      <td style="font-size:12px;color:#8899bb">${r[5]||'—'}</td>
+      <td class="notes-cell" title="${(r[6]||'').replace(/"/g,'')}">${r[6]||'—'}</td>
+      <td>${statusBadge(r[8])}</td>
+      <td>${r[7] ? `<a class="doc-link" href="${r[7]}" target="_blank">↗ فتح</a>` : '—'}</td>
+    </tr>`).join('');
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = filtered.length;
+  document.getElementById('s-done').textContent = filtered.filter(r => r[8] === 'Done').length;
+  document.getElementById('s-approve').textContent = filtered.filter(r => r[3] === 'موافقه اسعار').length;
+  document.getElementById('s-offer').textContent = filtered.filter(r => r[3] === 'تقديم اسعار').length;
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.trim();
+  const type = document.getElementById('filter-type').value;
+  const status = document.getElementById('filter-status').value;
+  const person = document.getElementById('filter-person').value;
+  filtered = allData.filter(r => {
+    if (q && !(r[2]||'').includes(q) && !(r[1]||'').includes(q) && !(r[6]||'').includes(q)) return false;
+    if (type && r[3] !== type) return false;
+    if (status === 'Done' && r[8] !== 'Done') return false;
+    if (status === 'pending' && r[8] === 'Done') return false;
+    if (person && r[1] !== person) return false;
+    return true;
+  });
+  render();
+}
+
+function clearFilters() {
+  document.getElementById('search').value = '';
+  document.getElementById('filter-type').value = '';
+  document.getElementById('filter-status').value = '';
+  document.getElementById('filter-person').value = '';
+  applyFilters();
+}
+
+document.getElementById('search').addEventListener('input', applyFilters);
+document.getElementById('filter-type').addEventListener('change', applyFilters);
+document.getElementById('filter-status').addEventListener('change', applyFilters);
+document.getElementById('filter-person').addEventListener('change', applyFilters);
+
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = parseInt(th.dataset.col);
+    if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+    document.querySelectorAll('th').forEach(t => t.classList.remove('asc','desc'));
+    th.classList.add(sortDir === 1 ? 'asc' : 'desc');
+    filtered.sort((a, b) => (a[col]||'').localeCompare(b[col]||'') * sortDir);
+    render();
+  });
+});
+
+loadData();
+</script>
 </body>
 </html>
